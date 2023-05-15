@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -14,10 +15,14 @@ import med.voll.api.domain.usuario.Usuario;
 
 @Service
 public class TokenService {
-		
+	
+	@Value("${api.security.token.secret}")
+	private String secret;
+	
 	public String gerarToken(Usuario usuario) {
+		System.out.println(secret);
 		try {
-		    Algorithm algoritmo = Algorithm.HMAC256("123456"); //algoritmo para realizar a assinatura digital do jwt
+		    Algorithm algoritmo = Algorithm.HMAC256(secret); //algoritmo para realizar a assinatura digital do jwt
 		    return JWT.create()
 		        .withIssuer("API Voll.med")
 		        .withSubject(usuario.getLogin())
